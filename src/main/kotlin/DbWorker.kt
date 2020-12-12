@@ -2,6 +2,7 @@ import cities.prepareCitiesTable
 import flights.Flight
 import flights.prepareFlightsTable
 import org.postgresql.jdbc.TimestampUtils
+import planes.preparePlanesTable
 import utils.use
 import java.sql.Connection
 import java.sql.DriverManager
@@ -42,22 +43,7 @@ class DbWorker {
                     connection.use {
                         it.prepareStatement("create schema $schemaName;").execute()
                         prepareCitiesTable(it)
-                        it.prepareStatement(
-                            "create table $schemaName.planes" +
-                                    "(" +
-                                    "id serial not null," +
-                                    "make varchar(50) not null," +
-                                    "distance int not null," +
-                                    "seats_number int not null," +
-                                    "tank_volume int not null," +
-                                    "load_capacity int not null" +
-                                    ");" +
-                                    "create unique index planes_id_uindex " +
-                                    "on $schemaName.planes (id); " +
-                                    "alter table $schemaName.planes " +
-                                    "add constraint planes_pk " +
-                                    "primary key (id);"
-                        ).execute()
+                        preparePlanesTable(it)
                         prepareFlightsTable(it)
                     }
                 }

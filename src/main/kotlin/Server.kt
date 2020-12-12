@@ -1,11 +1,12 @@
 import com.sun.net.httpserver.HttpServer
-import handlers.FirstEndPointHandler
+import flights.FlightsHandler
 import java.net.InetSocketAddress
 
 class Server {
-    fun listenForAuth(state: String) {
-        val server = HttpServer.create(InetSocketAddress(portNumber), 0)
-        server.createContext("/$firstEndPoint", FirstEndPointHandler())
+    val port = portNumber
+    fun startServer(){
+        val server = HttpServer.create(InetSocketAddress(port), 0)
+        server.createContext(flightsEndPoint, FlightsHandler())
         server.executor = null // creates a default executor
         server.start()
     }

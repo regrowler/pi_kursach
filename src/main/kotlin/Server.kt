@@ -1,3 +1,4 @@
+import cities.CitiesHandler
 import com.sun.net.httpserver.HttpServer
 import flights.Flight
 import flights.FlightsHandler
@@ -13,6 +14,7 @@ class Server {
         DbWorker.initializeDataBase()
         val server = HttpServer.create(InetSocketAddress(port), 0)
         server.createContext(flightsEndPoint, FlightsHandler())
+        server.createContext(citiesEndPoint, CitiesHandler())
         server.executor = null // creates a default executor
         server.start()
     }

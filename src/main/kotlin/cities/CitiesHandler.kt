@@ -1,28 +1,25 @@
-package flights
-
+package cities
 
 import HTTPMethod
-import com.google.gson.GsonBuilder
 import com.sun.net.httpserver.HttpExchange
 import com.sun.net.httpserver.HttpHandler
 import utils.sendResponse
-import java.io.BufferedReader
-import java.io.InputStreamReader
 import java.lang.Exception
 
-class FlightsHandler : HttpHandler {
+class CitiesHandler : HttpHandler {
     override fun handle(httpExchange: HttpExchange) {
         when (HTTPMethod(httpExchange.requestMethod)) {
             HTTPMethod.POST -> processPost(httpExchange)
             HTTPMethod.PUT -> processPut(httpExchange)
             HTTPMethod.DELETE -> processDelete(httpExchange)
+            HTTPMethod.GET -> processGet(httpExchange)
         }
     }
 
     private fun processPost(httpExchange: HttpExchange) {
         try {
-            val flight = Flight.readFlight(httpExchange.requestBody)
-            flight.save()
+            val city = City.readCity(httpExchange.requestBody)
+            city.save()
             httpExchange.sendResponse(201)
         } catch (e: Exception) {
             httpExchange.sendResponse(422, e.localizedMessage)
@@ -33,11 +30,11 @@ class FlightsHandler : HttpHandler {
     private fun processPut(httpExchange: HttpExchange) {
         try {
             var id = httpExchange.requestURI.path.split("/").last().toInt()
-            var flight = Flight.readFlight(httpExchange.requestBody)
-            flight = flight.copy(
+            var city = City.readCity(httpExchange.requestBody)
+            city = city.copy(
                 id = id
             )
-            flight.save()
+            city.save()
             httpExchange.sendResponse(200)
         } catch (e: Exception) {
             httpExchange.sendResponse(422, e.localizedMessage)
@@ -47,8 +44,16 @@ class FlightsHandler : HttpHandler {
     private fun processDelete(httpExchange: HttpExchange) {
         try {
             val id = httpExchange.requestURI.path.split("/").last().toInt()
-            Flight.deleteFlight(id)
+            City.deleteCity(id)
             httpExchange.sendResponse(204)
+        } catch (e: Exception) {
+            httpExchange.sendResponse(500, e.localizedMessage)
+        }
+    }
+
+    private fun processGet(httpExchange: HttpExchange) {
+        try {
+            httpExchange.sendResponse(200, City.getCities())
         } catch (e: Exception) {
             httpExchange.sendResponse(500, e.localizedMessage)
         }

@@ -25,5 +25,9 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
     testCompile group: 'junit', name: 'junit', version: '4.12'
 
+    // https://mvnrepository.com/artifact/org.postgresql/postgresql
+    compile group: 'org.postgresql', name: 'postgresql', version: '42.2.18'
+    compile 'joda-time:joda-time:2.10.8'
+
     implementation 'com.google.code.gson:gson:2.8.2'
 }

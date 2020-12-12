@@ -5,6 +5,7 @@ import DbWorker.Companion.connection
 import DbWorker.Companion.schemaName
 import com.google.gson.annotations.SerializedName
 import utils.gson
+import utils.parseDateTime
 import utils.use
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -16,8 +17,8 @@ import java.util.*
 data class Flight(
     @SerializedName("id") val id: Int,
     @SerializedName("plane_id") val planeId: Int,
-    @SerializedName("departure_time") val departureTime: Date,
-    @SerializedName("arrival_time") val arrivalTime: Date,
+    @SerializedName("departure_time") val departureTime: String,
+    @SerializedName("arrival_time") val arrivalTime: String,
     @SerializedName("destination_id") val destinationId: Int,
     @SerializedName("departure_id") val departureId: Int
 ) : Serializable {
@@ -66,8 +67,8 @@ private fun DbWorker.Companion.saveFlight(flight: Flight) {
                         "   departure_id) " +
                         "VALUES (" +
                         "   ${flight.planeId}," +
-                        "   '${Timestamp(flight.departureTime.time)}'," +
-                        "   '${Timestamp(flight.arrivalTime.time)}'," +
+                        "   '${Timestamp(parseDateTime(flight.departureTime).millis)}'," +
+                        "   '${Timestamp(parseDateTime(flight.arrivalTime).millis)}'," +
                         "   ${flight.destinationId}," +
                         "   ${flight.departureId});"
             ).execute()
@@ -75,8 +76,8 @@ private fun DbWorker.Companion.saveFlight(flight: Flight) {
             it.prepareStatement(
                 "update $schemaName.flights set " +
                         "plane_id=${flight.planeId}," +
-                        "departure_time='${Timestamp(flight.departureTime.time)}'," +
-                        "arrival_time='${Timestamp(flight.arrivalTime.time)}'," +
+                        "departure_time='${Timestamp(parseDateTime(flight.departureTime).millis)}'," +
+                        "arrival_time='${Timestamp(parseDateTime(flight.arrivalTime).millis)}'," +
                         "destination_id=${flight.destinationId}," +
                         "departure_id=${flight.departureId} where id=${flight.id};"
             ).execute()

@@ -15,7 +15,7 @@ class Server {
     fun startServer() {
         DbWorker.initializeDataBase()
         val server = HttpServer.create(InetSocketAddress(port), 0)
-        server.createContext(flightsEndPoint, FlightsHandler())
+//        server.createContext(flightsEndPoint, FlightsHandler())
         server.createContext(citiesEndPoint, CitiesHandler())
         server.createContext(planesEndPoint,PlanesHandler())
         server.createContext(schedulesEndPoint,SchedulesHandler())

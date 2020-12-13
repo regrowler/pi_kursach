@@ -4,6 +4,7 @@ import DbWorker
 import DbWorker.Companion.connection
 import DbWorker.Companion.schemaName
 import com.google.gson.annotations.SerializedName
+import org.joda.time.DateTime
 import utils.gson
 import utils.parseDateTime
 import utils.use
@@ -11,6 +12,7 @@ import java.io.InputStream
 import java.io.InputStreamReader
 import java.io.Serializable
 import java.sql.Connection
+import java.sql.Date
 import java.sql.Timestamp
 import java.util.*
 
@@ -33,6 +35,11 @@ data class Flight(
         fun deleteFlight(id: Int) {
             DbWorker.deleteFlight(id)
         }
+
+        fun deleteFlights(dateTime: DateTime) {
+            DbWorker.deleteFlights(dateTime)
+        }
+
     }
 }
 
@@ -88,5 +95,12 @@ private fun DbWorker.Companion.saveFlight(flight: Flight) {
 private fun DbWorker.Companion.deleteFlight(flightId: Int) {
     connection.use {
         it.prepareStatement("delete from main_schema.flights where id=$flightId;").execute()
+    }
+}
+
+private fun DbWorker.Companion.deleteFlights(dateTime: DateTime) {
+    connection.use {
+        it.prepareStatement("delete from main_schema.flights where arrival_time::date ='${Date(dateTime.millis)}';")
+            .execute()
     }
 }

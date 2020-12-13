@@ -23,11 +23,8 @@ data class City(
         fun readCity(inputStream: InputStream): City =
             gson.fromJson<City>(InputStreamReader(inputStream), City::class.java)
 
-        fun getCities(): String {
-            var t=gson.toJson(DbWorker.getCities())
-            return t
-        }
-
+        fun getCities(): String = gson.toJson(DbWorker.getCities())
+        fun getCitiesObjects(): List<City> = DbWorker.getCities()
         fun deleteCity(id: Int) {
             DbWorker.deleteCity(id)
         }

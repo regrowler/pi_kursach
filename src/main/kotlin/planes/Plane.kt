@@ -1,7 +1,5 @@
 package planes
 
-
-import cities.City
 import com.google.gson.annotations.SerializedName
 import utils.gson
 import utils.use
@@ -26,11 +24,8 @@ data class Plane(
         fun readPlane(inputStream: InputStream): Plane =
             gson.fromJson<Plane>(InputStreamReader(inputStream), Plane::class.java)
 
-        fun getPlanes(): String {
-            var t = gson.toJson(DbWorker.getPlanes())
-            return t
-        }
-
+        fun getPlanes(): String = gson.toJson(DbWorker.getPlanes())
+        fun getPlanesObjects(): List<Plane> = DbWorker.getPlanes()
         fun deletePlane(id: Int) {
             DbWorker.deletePlane(id)
         }

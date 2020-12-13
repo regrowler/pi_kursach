@@ -4,6 +4,7 @@ import flights.prepareFlightsTable
 import org.postgresql.jdbc.TimestampUtils
 import planes.preparePlanesTable
 import utils.use
+import java.io.File
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.Timestamp
@@ -29,8 +30,6 @@ class DbWorker {
         }
 
         fun initializeDataBase() {
-            var stamp = Timestamp(Date().time)
-            var stampV = stamp.toString()
             getConnection(baseUrl).use { con ->
                 val resSet = con.prepareStatement(
                     "select exists(\n" +

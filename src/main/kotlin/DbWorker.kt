@@ -13,10 +13,11 @@ import java.util.*
 
 class DbWorker {
     companion object {
+        private const val dbIp="140.82.36.93"
         private const val databaseName = "flexair"
         internal const val schemaName = "main_schema"
-        private const val baseUrl = "jdbc:postgresql://localhost:5432/"
-        private const val databaseUrl = "jdbc:postgresql://localhost:5432/$databaseName"
+        private const val baseUrl = "jdbc:postgresql://$dbIp:5432/"
+        private const val databaseUrl = "jdbc:postgresql://$dbIp:5432/$databaseName"
 
         val connection: Connection
             get() {
@@ -25,7 +26,9 @@ class DbWorker {
 
         private fun getConnection(url: String = databaseUrl): Connection {
             val user = "postgres"
-            val passwd = "123456"
+//            val passwd = "123456"
+            val passwd =
+                "0L|K7_n/f#T7%(hKPVo\\)9i?I^=Fa*5_L4(B;04Ma\\I[Fp&*U3++,8^I(qoAPUPaQ.Yp%5dXVk5gE\$}H&=:%I2;9gbg3e6kQl=WjkMr~U.\"W_o:XIsBdm~h|w\\sX_wjM"
             return DriverManager.getConnection(url, user, passwd)
         }
 

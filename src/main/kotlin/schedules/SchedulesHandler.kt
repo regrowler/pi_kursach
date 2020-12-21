@@ -14,6 +14,7 @@ class SchedulesHandler : HttpHandler {
         when (HTTPMethod(httpExchange.requestMethod)) {
             HTTPMethod.GET -> processGet(httpExchange)
             HTTPMethod.POST -> processPost(httpExchange)
+            else->httpExchange.sendResponse(200)
         }
     }
 

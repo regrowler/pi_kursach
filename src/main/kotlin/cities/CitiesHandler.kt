@@ -13,6 +13,7 @@ class CitiesHandler : HttpHandler {
             HTTPMethod.PUT -> processPut(httpExchange)
             HTTPMethod.DELETE -> processDelete(httpExchange)
             HTTPMethod.GET -> processGet(httpExchange)
+            else->httpExchange.sendResponse(200)
         }
     }
 

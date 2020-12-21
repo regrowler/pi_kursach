@@ -16,6 +16,7 @@ class FlightsHandler : HttpHandler {
             HTTPMethod.POST -> processPost(httpExchange)
             HTTPMethod.PUT -> processPut(httpExchange)
             HTTPMethod.DELETE -> processDelete(httpExchange)
+            else->httpExchange.sendResponse(200)
         }
     }
 

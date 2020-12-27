@@ -19,7 +19,7 @@ class CitiesHandler : HttpHandler {
 
     private fun processPost(httpExchange: HttpExchange) {
         try {
-            val city = City.readCity(httpExchange.requestBody)
+            val city = City.readCity(httpExchange)
             city.save()
             httpExchange.sendResponse(201)
         } catch (e: Exception) {
@@ -31,7 +31,7 @@ class CitiesHandler : HttpHandler {
     private fun processPut(httpExchange: HttpExchange) {
         try {
             var id = httpExchange.requestURI.path.split("/").last().toInt()
-            var city = City.readCity(httpExchange.requestBody)
+            var city = City.readCity(httpExchange)
             city = city.copy(
                 id = id
             )

@@ -1,6 +1,7 @@
 package planes
 
 import com.google.gson.annotations.SerializedName
+import com.sun.net.httpserver.HttpExchange
 import utils.gson
 import utils.use
 import java.io.InputStream
@@ -21,8 +22,10 @@ data class Plane(
     }
 
     companion object {
-        fun readPlane(inputStream: InputStream): Plane =
-            gson.fromJson<Plane>(InputStreamReader(inputStream), Plane::class.java)
+        fun readPlane(httpExchange: HttpExchange): Plane {
+            val req= String(httpExchange.requestBody.readBytes())
+            return gson.fromJson<Plane>(req, Plane::class.java)
+        }
 
         fun getPlanes(): String = gson.toJson(DbWorker.getPlanes())
         fun getPlanesObjects(): List<Plane> = DbWorker.getPlanes()

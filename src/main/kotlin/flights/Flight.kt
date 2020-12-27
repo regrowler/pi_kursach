@@ -4,6 +4,7 @@ import DbWorker
 import DbWorker.Companion.connection
 import DbWorker.Companion.schemaName
 import com.google.gson.annotations.SerializedName
+import com.sun.net.httpserver.HttpExchange
 import org.joda.time.DateTime
 import utils.gson
 import utils.parseDateTime
@@ -29,8 +30,11 @@ data class Flight(
     }
 
     companion object {
-        fun readFlight(inputStream: InputStream): Flight =
-            gson.fromJson<Flight>(InputStreamReader(inputStream), Flight::class.java)
+        fun readFlight(httpExchange: HttpExchange): Flight {
+            val req= String(httpExchange.requestBody.readBytes())
+            return gson.fromJson<Flight>(req, Flight::class.java)
+        }
+
 
         fun deleteFlight(id: Int) {
             DbWorker.deleteFlight(id)

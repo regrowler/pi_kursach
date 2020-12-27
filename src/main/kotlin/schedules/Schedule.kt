@@ -6,6 +6,7 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonPrimitive
 import com.google.gson.annotations.SerializedName
+import com.sun.net.httpserver.HttpExchange
 import flights.Flight
 import org.joda.time.DateTime
 import planes.Plane
@@ -28,8 +29,9 @@ data class Schedule(
     }
 
     companion object {
-        fun readSchedule(inputStream: InputStream): Schedule {
-            var schedule = gson.fromJson<Schedule>(InputStreamReader(inputStream), Schedule::class.java)
+        fun readSchedule(httpExchange: HttpExchange): Schedule {
+            val req= String(httpExchange.requestBody.readBytes())
+            var schedule = gson.fromJson<Schedule>(req, Schedule::class.java)
             val dateTime = parseDate(schedule.date)
             val flights = schedule.flights.map {
                 var arrivalTime = parseTime(it.arrivalTime)

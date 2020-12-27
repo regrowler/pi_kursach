@@ -11,7 +11,7 @@ fun HttpExchange.sendResponse(code: Int, response: String) {
     responseHeaders.add("Content-type", "application/json;charset=UTF-8")
     responseHeaders.add("Access-Control-Allow-Origin", "*")
     responseHeaders.add("Access-Control-Allow-Credentials", "true")
-    responseHeaders.add("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT")
+    responseHeaders.add("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT,DELETE")
     responseHeaders.add(
         "Access-Control-Allow-Headers",
         "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, content-type, Access-Control-Request-Method, Access-Control-Request-Headers"

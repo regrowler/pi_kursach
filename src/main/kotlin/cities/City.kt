@@ -1,6 +1,7 @@
 package cities
 
 import com.google.gson.annotations.SerializedName
+import com.sun.net.httpserver.HttpExchange
 import flights.Flight
 import utils.gson
 import utils.use
@@ -20,8 +21,10 @@ data class City(
     }
 
     companion object {
-        fun readCity(inputStream: InputStream): City =
-            gson.fromJson<City>(InputStreamReader(inputStream), City::class.java)
+        fun readCity(httpExchange: HttpExchange): City {
+            val req= String(httpExchange.requestBody.readBytes())
+            return gson.fromJson(req,City::class.java)
+        }
 
         fun getCities(): String = gson.toJson(DbWorker.getCities())
         fun getCitiesObjects(): List<City> = DbWorker.getCities()

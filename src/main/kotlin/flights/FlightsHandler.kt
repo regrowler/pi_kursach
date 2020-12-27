@@ -22,7 +22,7 @@ class FlightsHandler : HttpHandler {
 
     private fun processPost(httpExchange: HttpExchange) {
         try {
-            val flight = Flight.readFlight(httpExchange.requestBody)
+            val flight = Flight.readFlight(httpExchange)
             flight.save()
             httpExchange.sendResponse(201)
         } catch (e: Exception) {
@@ -34,7 +34,7 @@ class FlightsHandler : HttpHandler {
     private fun processPut(httpExchange: HttpExchange) {
         try {
             var id = httpExchange.requestURI.path.split("/").last().toInt()
-            var flight = Flight.readFlight(httpExchange.requestBody)
+            var flight = Flight.readFlight(httpExchange)
             flight = flight.copy(
                 id = id
             )

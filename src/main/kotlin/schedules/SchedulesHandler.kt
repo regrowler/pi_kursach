@@ -30,7 +30,7 @@ class SchedulesHandler : HttpHandler {
 
     private fun processPost(httpExchange: HttpExchange) {
         try {
-            val schedule = Schedule.readSchedule(httpExchange.requestBody)
+            val schedule = Schedule.readSchedule(httpExchange)
             schedule.save()
             httpExchange.sendResponse(201)
         } catch (e: Exception) {

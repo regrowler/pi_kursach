@@ -31,7 +31,7 @@ data class Flight(
 
     companion object {
         fun readFlight(httpExchange: HttpExchange): Flight {
-            val req= String(httpExchange.requestBody.readBytes())
+            val req = String(httpExchange.requestBody.readBytes())
             return gson.fromJson<Flight>(req, Flight::class.java)
         }
 
@@ -68,31 +68,21 @@ fun DbWorker.Companion.prepareFlightsTable(connection: Connection) {
 
 private fun DbWorker.Companion.saveFlight(flight: Flight) {
     connection.use {
-        if (flight.id == 0) {
-            it.prepareStatement(
-                "insert into $schemaName.flights (" +
-                        "   plane_id, " +
-                        "   departure_time, " +
-                        "   arrival_time, " +
-                        "   destination_id, " +
-                        "   departure_id) " +
-                        "VALUES (" +
-                        "   ${flight.planeId}," +
-                        "   '${Timestamp(parseDateTime(flight.departureTime).millis)}'," +
-                        "   '${Timestamp(parseDateTime(flight.arrivalTime).millis)}'," +
-                        "   ${flight.destinationId}," +
-                        "   ${flight.departureId});"
-            ).execute()
-        } else {
-            it.prepareStatement(
-                "update $schemaName.flights set " +
-                        "plane_id=${flight.planeId}," +
-                        "departure_time='${Timestamp(parseDateTime(flight.departureTime).millis)}'," +
-                        "arrival_time='${Timestamp(parseDateTime(flight.arrivalTime).millis)}'," +
-                        "destination_id=${flight.destinationId}," +
-                        "departure_id=${flight.departureId} where id=${flight.id};"
-            ).execute()
-        }
+        it.prepareStatement(
+            "insert into $schemaName.flights (" +
+                    "   plane_id, " +
+                    "   departure_time, " +
+                    "   arrival_time, " +
+                    "   destination_id, " +
+                    "   departure_id) " +
+                    "VALUES (" +
+                    "   ${flight.planeId}," +
+                    "   '${Timestamp(parseDateTime(flight.departureTime).millis)}'," +
+                    "   '${Timestamp(parseDateTime(flight.arrivalTime).millis)}'," +
+                    "   ${flight.destinationId}," +
+                    "   ${flight.departureId});"
+        ).execute()
+
     }
 }
 

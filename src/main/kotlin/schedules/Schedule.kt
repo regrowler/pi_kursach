@@ -83,7 +83,7 @@ private fun Schedule.check() {
                 var d1 = parseDateTime(flight.arrivalTime)
                 var d2 = parseDateTime(arrivalFlights[i].arrivalTime)
                 val diff = abs(d1.millis - d2.millis) / 1000.0 / 60.0
-                if (diff > 20) right = false
+                if (diff < 20) right = false
             }
         }
     }
@@ -94,7 +94,7 @@ private fun Schedule.check() {
                 var d1 = parseDateTime(flight.departureTime)
                 var d2 = parseDateTime(departureFlights[i].departureTime)
                 val diff = abs(d1.millis - d2.millis) / 1000.0 / 60.0
-                if (diff > 20) right = false
+                if (diff < 20) right = false
             }
         }
     }

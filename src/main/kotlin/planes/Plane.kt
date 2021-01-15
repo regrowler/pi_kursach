@@ -2,11 +2,13 @@ package planes
 
 import com.google.gson.annotations.SerializedName
 import com.sun.net.httpserver.HttpExchange
+import schedules.deleteFlightsByPlaneId
 import utils.gson
 import utils.use
 import java.io.InputStream
 import java.io.InputStreamReader
 import java.io.Serializable
+import java.lang.Exception
 import java.sql.Connection
 
 data class Plane(
@@ -18,18 +20,21 @@ data class Plane(
     @SerializedName("load_capacity") val loadCapacity: Int
 ) : Serializable {
     fun save() {
-        DbWorker.savePlane(this)
+        if (!DbWorker.checkIfPlaneExits(make))
+            DbWorker.savePlane(this)
+        else throw Exception("Самолет уже существует")
     }
 
     companion object {
         fun readPlane(httpExchange: HttpExchange): Plane {
-            val req= String(httpExchange.requestBody.readBytes())
+            val req = String(httpExchange.requestBody.readBytes())
             return gson.fromJson<Plane>(req, Plane::class.java)
         }
 
         fun getPlanes(): String = gson.toJson(DbWorker.getPlanes())
         fun getPlanesObjects(): List<Plane> = DbWorker.getPlanes()
         fun deletePlane(id: Int) {
+            DbWorker.deleteFlightsByPlaneId(id)
             DbWorker.deletePlane(id)
         }
     }
@@ -109,4 +114,13 @@ private fun DbWorker.Companion.deletePlane(id: Int) {
     connection.use {
         it.prepareStatement("delete from $schemaName.planes where id=$id;").execute()
     }
+}
+
+private fun DbWorker.Companion.checkIfPlaneExits(name: String): Boolean {
+    var flag = false
+    connection.use {
+        var res = it.prepareStatement("select 1 from $schemaName.planes where make='$name';").executeQuery()
+        flag = res.next()
+    }
+    return flag
 }

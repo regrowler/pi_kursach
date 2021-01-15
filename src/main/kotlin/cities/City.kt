@@ -3,11 +3,13 @@ package cities
 import com.google.gson.annotations.SerializedName
 import com.sun.net.httpserver.HttpExchange
 import flights.Flight
+import schedules.deleteFlightsByCityId
 import utils.gson
 import utils.use
 import java.io.InputStream
 import java.io.InputStreamReader
 import java.io.Serializable
+import java.lang.Exception
 import java.sql.Connection
 import java.sql.Timestamp
 
@@ -17,18 +19,21 @@ data class City(
     @SerializedName("distance") val distance: Int
 ) : Serializable {
     fun save() {
-        DbWorker.saveCity(this)
+        if (!DbWorker.checkIfCityExits(name))
+            DbWorker.saveCity(this)
+        else throw Exception("Город уже существует")
     }
 
     companion object {
         fun readCity(httpExchange: HttpExchange): City {
-            val req= String(httpExchange.requestBody.readBytes())
-            return gson.fromJson(req,City::class.java)
+            val req = String(httpExchange.requestBody.readBytes())
+            return gson.fromJson(req, City::class.java)
         }
 
         fun getCities(): String = gson.toJson(DbWorker.getCities())
         fun getCitiesObjects(): List<City> = DbWorker.getCities()
         fun deleteCity(id: Int) {
+            DbWorker.deleteFlightsByCityId(id)
             DbWorker.deleteCity(id)
         }
     }
@@ -93,4 +98,13 @@ private fun DbWorker.Companion.deleteCity(id: Int) {
     connection.use {
         it.prepareStatement("delete from $schemaName.cities where id=$id;").execute()
     }
+}
+
+private fun DbWorker.Companion.checkIfCityExits(name: String): Boolean {
+    var flag = false
+    connection.use {
+        var res = it.prepareStatement("select 1 from $schemaName.cities where name='$name';").executeQuery()
+        flag = res.next()
+    }
+    return flag
 }

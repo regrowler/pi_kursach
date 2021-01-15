@@ -101,13 +101,13 @@ private fun Schedule.check() {
     if (!right) throw Exception("отбывающие рейсы в расписании пересекаются по времени")
     for (i in flights.indices) {
         val d1 = cities.find { it.id == flights[i].departureId }
-            ?: throw Exception("город с id =${flights[i].departureId}")
+            ?: throw Exception("город с id =${flights[i].departureId} не найден")
         val d2 = cities.find { it.id == flights[i].destinationId }
-            ?: throw Exception("город с id =${flights[i].destinationId}")
+            ?: throw Exception("город с id =${flights[i].destinationId} не найден")
         val distance = abs(d1.distance - d2.distance)
         val plane =
-            planes.find { it.id == flights[i].planeId } ?: throw Exception("самолет с id =${flights[i].planeId}")
-        if (distance > plane.distance) throw Exception("расстояние между городами превышает дальность полета самолета")
+            planes.find { it.id == flights[i].planeId } ?: throw Exception("самолет с id =${flights[i].planeId} не найден")
+        if (distance > plane.distance) throw Exception("для рейса ${i+1} расстояние между городами превышает дальность полета самолета")
     }
 }
 
@@ -132,4 +132,20 @@ private fun DbWorker.Companion.getSchedule(date: DateTime): List<Flight> {
         }
     }
     return flights
+}
+
+fun DbWorker.Companion.deleteFlightsByPlaneId(id:Int){
+    connection.use {
+        it.prepareStatement("delete " +
+                "from  $schemaName.flights " +
+                "where plane_id = $id;").execute()
+    }
+}
+
+fun DbWorker.Companion.deleteFlightsByCityId(id:Int){
+    connection.use {
+        it.prepareStatement("delete " +
+                "from $schemaName.flights " +
+                "where departure_id=$id or destination_id=$id;").execute()
+    }
 }

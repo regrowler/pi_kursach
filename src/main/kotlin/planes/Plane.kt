@@ -25,6 +25,10 @@ data class Plane(
         else throw Exception("Самолет уже существует")
     }
 
+    fun update(){
+        DbWorker.savePlane(this)
+    }
+
     companion object {
         fun readPlane(httpExchange: HttpExchange): Plane {
             val req = String(httpExchange.requestBody.readBytes())

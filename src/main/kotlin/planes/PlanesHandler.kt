@@ -36,7 +36,7 @@ class PlanesHandler :HttpHandler {
             plane = plane.copy(
                 id = id
             )
-            plane.save()
+            plane.update()
             httpExchange.sendResponse(200)
         } catch (e: Exception) {
             httpExchange.sendResponse(422, e.localizedMessage)

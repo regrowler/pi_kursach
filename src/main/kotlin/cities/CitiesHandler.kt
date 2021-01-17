@@ -35,7 +35,7 @@ class CitiesHandler : HttpHandler {
             city = city.copy(
                 id = id
             )
-            city.save()
+            city.update()
             httpExchange.sendResponse(200)
         } catch (e: Exception) {
             httpExchange.sendResponse(422, e.localizedMessage)

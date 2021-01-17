@@ -24,6 +24,10 @@ data class City(
         else throw Exception("Город уже существует")
     }
 
+    fun update() {
+        DbWorker.saveCity(this)
+    }
+
     companion object {
         fun readCity(httpExchange: HttpExchange): City {
             val req = String(httpExchange.requestBody.readBytes())
